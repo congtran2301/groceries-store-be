@@ -2,6 +2,7 @@ import { success, error } from '../utils/response';
 
 const validation = (validations) => {
   return async (req, res, next) => {
+    console.log('validating');
     try {
       Object.keys(validations).forEach((validation) => {
         let validationResult = validations[validation].validate(

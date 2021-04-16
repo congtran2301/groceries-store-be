@@ -1,6 +1,5 @@
 import { pick } from 'lodash';
 import { success, error } from '../../common/utils/response';
-import orderValidation from './order.validation';
 import productServices from '../Product/product.services';
 import paginationServices from '../../common/pagination';
 import handleDuplicateProduct from '../../common/utils/handleDuplicateProduct';
@@ -40,8 +39,14 @@ const createOrder = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   try {
+    console.log('update order');
     const { orderId } = req.params;
     const updateData = req.body;
+    const staffId = req.user._id;
+
+    if (updateData.isPaid) {
+      updateData.staffId = staffId;
+    }
 
     await orderServices.updateOrder({ _id: orderId }, updateData);
     return success({ res, message: 'update success', statusCode: 200 });
@@ -52,6 +57,7 @@ const updateOrder = async (req, res) => {
 
 const getOrders = async (req, res) => {
   try {
+    console.log('get order controller');
     const role = req.user.role;
     const userId = req.user._id;
     const populations = [

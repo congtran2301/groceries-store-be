@@ -1,14 +1,22 @@
-import userController from './user.controller';
 import { Router } from 'express';
+import { mongoIdSchema } from '../../common/joiSchema';
+import validate from '../../common/middleware/validation';
+import userController from './user.controller';
+import userValidationSchema from './user.validation';
 import authServices from '../Auth/auth.services';
+
 const router = Router();
 const staffRouter = Router();
 
 staffRouter.get('/', userController.getUsers);
 staffRouter
   .route('/:id')
+  .all(validate({ params: mongoIdSchema }))
   .get(userController.getUserById)
-  .put(userController.updateUserById)
+  .put(
+    validate({ body: userValidationSchema.userUpdate }),
+    userController.updateUserById
+  )
   .delete(userController.deleteUserById);
 router.use(
   '/staff',
@@ -21,7 +29,7 @@ router.use(
 router.use(authServices.isAuthentication);
 router
   .route('/:id')
-  .all(authServices.selfModify)
+  .all(validate({ params: mongoIdSchema }), authServices.selfModify)
   .get(userController.getUserById)
   .put(userController.updateUserById);
 

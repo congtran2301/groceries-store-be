@@ -1,8 +1,9 @@
-import Joi from "joi";
-const Product = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-  price: Joi.number().min(0).required(),
-  categoryId: Joi.string().required(),
-  imageUrls: Joi.array().items(Joi.string()).required(),
+import Joi from 'joi';
+import { positiveNumber, mongoId } from '../../common/joiSchema';
+const createProduct = Joi.object({
+  name: Joi.string().min(3).max(50).required(),
+  price: positiveNumber.message('Price must be greater than or equal to 1'),
+  categoryId: mongoId,
+  imageUrls: Joi.array().items(Joi.string()).required()
 });
-export default Product;
+export default { createProduct };

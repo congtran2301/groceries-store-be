@@ -1,15 +1,26 @@
 import { Router } from 'express';
+import { mongoIdSchema } from '../../common/joiSchema';
 import productController from './product.controller';
 import authServices from '../Auth/auth.services';
+import productValidationSchema from './product.validation';
+import validate from '../../common/middleware/validation';
 
 const router = Router();
 const staffRouter = Router();
 
-staffRouter.get('/:id', productController.getProductById);
-staffRouter.get('/', productController.getProducts);
-staffRouter.post('/', productController.createProduct);
-staffRouter.put('/:id', productController.updateProductById);
-staffRouter.delete('/:id', productController.deleteProductById);
+staffRouter
+  .route('/')
+  .get(productController.getProducts)
+  .post(productController.createProduct);
+staffRouter
+  .route('/:id')
+  .all(validate({ params: mongoIdSchema }))
+  .get(productController.getProductById)
+  .put(
+    validate({ body: productValidationSchema.createProduct }),
+    productController.updateProductById
+  )
+  .delete(productController.deleteProductById);
 
 router.use(
   '/staff',
@@ -17,7 +28,11 @@ router.use(
   authServices.hasStaffPermission,
   staffRouter
 );
-router.get('/:id', productController.getProductById);
+router.get(
+  '/:id',
+  validate({ params: mongoIdSchema }),
+  productController.getProductById
+);
 router.get('/', productController.getProducts);
 
 export default router;

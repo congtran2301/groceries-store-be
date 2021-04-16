@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
-import categoryServices from './category.services';
 import { success, error } from '../../common/utils/response';
+import categoryServices from './category.services';
 
 const createCategory = async (req, res) => {
   try {

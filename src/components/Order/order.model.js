@@ -22,6 +22,10 @@ const orderSchema = new Schema(
       ref: 'user',
       required: true
     },
+    staffId: {
+      type: Schema.Types.ObjectId,
+      ref: 'user'
+    },
     address: {
       type: String,
       required: true
@@ -43,6 +47,10 @@ const orderSchema = new Schema(
       enum: ['pending', 'processing', 'delivering', 'delivered', 'completed'],
       default: 'pending'
     },
+    date: {
+      type: Date,
+      default: Date.now
+    },
     products: [productSchema]
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
@@ -54,5 +62,12 @@ orderSchema.virtual('user', {
   foreignField: '_id',
   justOne: true
 });
+orderSchema.virtual('staff', {
+  ref: 'user',
+  localField: 'staffId',
+  foreignField: '_id',
+  justOne: true
+});
+
 const Order = mongoose.model('order', orderSchema);
 export default Order;

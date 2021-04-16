@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-const UserRegister = Joi.object({
+const userRegister = Joi.object({
   username: Joi.string().alphanum().min(3).max(30).required(),
 
   password: Joi.string()
@@ -8,7 +8,7 @@ const UserRegister = Joi.object({
     .message('Your password must be between 8 and 30 characters'),
   fullName: Joi.string().required()
 });
-const UserLogin = Joi.object({
+const userLogin = Joi.object({
   username: Joi.string().alphanum().min(3).max(30).required(),
 
   password: Joi.string()
@@ -16,9 +16,9 @@ const UserLogin = Joi.object({
     .message('Your password must be between 8 and 30 characters')
 });
 
-const UserUpdate = Joi.object({
+const userUpdate = Joi.object({
   fullName: Joi.string(),
   avatar: Joi.string()
 });
 
-export default { UserRegister, UserLogin, UserUpdate };
+export default { userRegister, userLogin, userUpdate };

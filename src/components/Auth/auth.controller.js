@@ -1,6 +1,5 @@
 import userServices from '../User/user.services';
 import cartServices from '../Cart/cart.services';
-import userValidate from '../User/user.validation';
 import { success, error } from '../../common/utils/response';
 import { pick } from 'lodash';
 import { sign } from 'jsonwebtoken';
@@ -10,17 +9,18 @@ const register = async (req, res) => {
   try {
     const userBody = pick(req.body, ['username', 'password', 'fullName']);
 
-    const user = await userValidate.UserRegister.validateAsync(userBody);
-
     const existUser = await userServices.getOneUser({
-      username: user.username,
+      username: userBody.username,
       status: 'active'
     });
 
     if (existUser)
       return error({ res, message: 'Username existed', statusCode: 400 });
 
-    const newUser = await userServices.createUser({ ...user, role: 'user' });
+    const newUser = await userServices.createUser({
+      ...userBody,
+      role: 'user'
+    });
     await cartServices.createEmptyCart(newUser._id);
 
     return success({
@@ -35,16 +35,10 @@ const register = async (req, res) => {
 };
 const login = async (req, res) => {
   try {
-    const userBody = pick(req.body, ['username', 'password']);
-
-    const { username, password } = await userValidate.UserLogin.validateAsync(
-      userBody
-    );
+    const { username, password } = pick(req.body, ['username', 'password']);
 
     const user = await userServices.getOneUser({ username, status: 'active' });
 
-    if (!user)
-      return error({ res, message: 'User does not exist', statusCode: 400 });
     const correctPassword = await user.validatePassword(password);
     if (!correctPassword)
       return error({ res, message: 'Wrong password', statusCode: 400 });

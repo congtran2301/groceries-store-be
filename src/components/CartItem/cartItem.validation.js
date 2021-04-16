@@ -1,11 +1,12 @@
 import Joi from 'joi';
-const AddToCart = Joi.object({
-  productId: Joi.string().required(),
+import { mongoId } from '../../common/joiSchema';
+const addToCartSchema = Joi.object({
+  productId: mongoId,
   quantity: Joi.required()
 });
-const UpdateCartItem = Joi.object({
-  cartItemId: Joi.string().required(),
+const updateCartItemSchema = Joi.object({
+  cartItemId: mongoId,
   quantity: Joi.required()
 });
 
-export default { AddToCart, UpdateCartItem };
+export default { addToCartSchema, updateCartItemSchema };

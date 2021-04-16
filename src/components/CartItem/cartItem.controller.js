@@ -1,18 +1,13 @@
 import cartServices from '../Cart/cart.services';
 import productServices from '../Product/product.services';
 import { pick } from 'lodash';
-import CartItemValidate from './cartItem.validation';
 import { success, error } from '../../common/utils/response';
 import cartItemServices from './cartItem.services';
 
-const getCart = async (req, res) => {};
 const addItemToCart = async (req, res) => {
   try {
     const userId = req.user._id;
-    const cartItemBody = pick(req.body, ['productId', 'quantity']);
-    const cartItem = await CartItemValidate.AddToCart.validateAsync(
-      cartItemBody
-    );
+    const cartItem = pick(req.body, ['productId', 'quantity']);
 
     const cart = await cartServices.getCartByUserId(userId);
     const product = await productServices.getOneProduct({
@@ -31,7 +26,7 @@ const addItemToCart = async (req, res) => {
         quantity: cartItem.quantity
       });
     } else {
-      let quantity = productExistInCart.quantity + cartItemBody.quantity;
+      let quantity = productExistInCart.quantity + cartItem.quantity;
       await cartItemServices.updateCartItem(
         { _id: productExistInCart._id },
         { quantity }
@@ -46,10 +41,7 @@ const updateCart = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const updateCartItemBody = pick(req.body, ['cartItemId', 'quantity']);
-    const updateCartItem = await CartItemValidate.UpdateCartItem.validateAsync(
-      updateCartItemBody
-    );
+    const updateCartItem = pick(req.body, ['cartItemId', 'quantity']);
 
     const cart = await cartServices.getCartByUserId(userId);
 
@@ -64,7 +56,6 @@ const updateCart = async (req, res) => {
 };
 
 export default {
-  getCart,
   addItemToCart,
   updateCart
 };

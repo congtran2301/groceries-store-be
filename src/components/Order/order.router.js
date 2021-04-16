@@ -11,7 +11,7 @@ staffRouter.get('/', orderController.getOrders);
 staffRouter.get('/:id', orderController.getOrder);
 staffRouter.put(
   '/:orderId',
-  validate(orderValidationSchema.updateOrder, 'body'),
+  validate({ body: orderValidationSchema.updateOrder }),
   orderController.updateOrder
 );
 
@@ -26,7 +26,9 @@ router.get('/', orderController.getOrders);
 router.get('/:orderId', orderController.getOrder);
 router.post(
   '/',
-  validate(orderValidationSchema.createOrder, 'body'),
+  validate({
+    body: orderValidationSchema.createOrder
+  }),
   orderController.createOrder
 );
 

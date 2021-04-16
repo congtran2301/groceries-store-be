@@ -2,7 +2,6 @@ import userServices from './user.services';
 import { success, error } from '../../common/utils/response';
 import { pick } from 'lodash';
 import paginationServices from '../../common/pagination';
-import userValidation from './user.validation';
 
 const getUsers = async (req, res) => {
   try {
@@ -42,11 +41,10 @@ const getUserById = async (req, res) => {
 const updateUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateUserBody = pick(req.body, ['fullName', 'avatar']);
-    const updateUser = await userValidation.UserUpdate.validateAsync(
-      updateUserBody
-    );
+    const updateUser = pick(req.body, ['fullName', 'avatar']);
+
     await userServices.updateUser({ _id: id }, updateUser);
+
     return success({ res, message: 'Update success' });
   } catch (err) {
     return error({ res, message: err.message, statusCode: 400 });

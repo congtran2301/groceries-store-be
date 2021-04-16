@@ -1,16 +1,17 @@
 import Joi from 'joi';
 import { Statuses } from './order.config';
+import { mongoId, positiveNumber } from '../../common/joiSchema';
+
 const createOrder = Joi.object({
   phone: Joi.string().required(),
   address: Joi.string().required(),
   productIds: Joi.array()
     .items(
       Joi.object({
-        quantity: Joi.number()
-          .integer()
-          .min(1)
-          .message('quantity must be greater than or equal to 1'),
-        id: Joi.string()
+        quantity: positiveNumber.message(
+          'quantity must be greater than or equal to 1'
+        ),
+        id: mongoId
       })
     )
     .required()

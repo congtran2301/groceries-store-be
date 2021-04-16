@@ -9,6 +9,7 @@ import uploadRouter from '../components/Upload/upload.router';
 import cartRouter from '../components/Cart/cart.router';
 import staffRouter from '../components/Staff/staff.router';
 import orderRouter from '../components/Order/order.router';
+import reportRouter from '../components/Report/report.router';
 
 router.use('/user', userRouter);
 router.use('/auth', authRouter);
@@ -18,5 +19,6 @@ router.use('/upload', uploadRouter);
 router.use('/cart', cartRouter);
 router.use('/staff', staffRouter);
 router.use('/order', orderRouter);
+router.use('/report', reportRouter);
 
 export default router;

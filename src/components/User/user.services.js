@@ -1,9 +1,9 @@
-import userValidate from './user.validation';
 import User from './user.model';
-import { pick } from 'lodash';
 
 const getOneUser = async (query, fields) => {
-  return await User.findOne(query, fields);
+  const user = await User.findOne(query, fields);
+  if (!user) throw new Error('User does not exist');
+  return user;
 };
 const getUsers = async ({ query, pagination, populations = [], fields }) => {
   const { page, perPage } = pagination;
