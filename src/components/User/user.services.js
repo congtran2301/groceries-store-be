@@ -2,7 +2,6 @@ import User from './user.model';
 
 const getOneUser = async (query, fields) => {
   const user = await User.findOne(query, fields);
-  if (!user) throw new Error('User does not exist');
   return user;
 };
 const getUsers = async ({ query, pagination, populations = [], fields }) => {

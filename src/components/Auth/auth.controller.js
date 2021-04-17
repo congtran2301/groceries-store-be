@@ -38,6 +38,12 @@ const login = async (req, res) => {
     const { username, password } = pick(req.body, ['username', 'password']);
 
     const user = await userServices.getOneUser({ username, status: 'active' });
+    if (!user)
+      return error({
+        res,
+        message: 'Username does not existed',
+        statusCode: 400
+      });
 
     const correctPassword = await user.validatePassword(password);
     if (!correctPassword)
