@@ -30,6 +30,7 @@ const getOneProduct = async (query) => {
   if (!product) throw new Error('Product not found');
   return product;
 };
+
 const countProducts = async (query = {}) => {
   return await Product.countDocuments(query);
 };
@@ -40,6 +41,21 @@ const deleteProduct = async (query) => {
     { isDelete: true },
     { new: true }
   );
+};
+
+const searchProduct = async (text) => {
+  const matchProduct = await Product.find(
+    { $text: { $search: text } },
+    { score: { $meta: 'textScore' } }
+  ).sort({ score: { $meta: 'textScore' } });
+  const count = await Product.find(
+    { $text: { $search: text } },
+    { score: { $meta: 'textScore' } }
+  ).countDocuments();
+  return {
+    count,
+    matchProduct
+  };
 };
 
 const updateProduct = async (query, data) => {
@@ -53,5 +69,6 @@ export default {
   createProduct,
   getOneProduct,
   deleteProduct,
-  updateProduct
+  updateProduct,
+  searchProduct
 };

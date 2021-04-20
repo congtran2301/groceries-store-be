@@ -1,0 +1,594 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample Amazan Store server.  You can find \nout more about Swagger at \n[http://swagger.io](http://swagger.io) or on \n[irc.freenode.net, #swagger](http://swagger.io/irc/).\n",
+    "version": "1.0.0",
+    "title": "Amazan Store",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "ttcong2301@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "igroceries-be.herokuapp.com/product",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Authenticate",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "product",
+      "description": "Access to store product"
+    },
+    {
+      "name": "user",
+      "description": "Operations about user",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
+      }
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Create user",
+        "description": "user can create their new account.",
+        "operationId": "createUser",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRegister"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logs user into the system",
+        "operationId": "loginUser",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "user object",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "headers": {
+              "X-Rate-Limit": {
+                "type": "integer",
+                "format": "int32",
+                "description": "calls per hour allowed by the user"
+              },
+              "X-Expires-After": {
+                "type": "string",
+                "format": "date-time",
+                "description": "date in UTC when token expires"
+              }
+            },
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        }
+      }
+    },
+    "/product/": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Get All products",
+        "operationId": "getProducts",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "number of product per page",
+            "required": false,
+            "type": "string",
+            "default": "10"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "number of product per page",
+            "required": false,
+            "type": "integer",
+            "default": 1
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }, 
+    "/product/staff": {
+      "post": {
+        "tags": [
+          "product"
+        ],
+        "summary": "create product",
+        "operationId": "createProduct",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateProduct"
+            },
+            "description": "product info",
+            "required": true
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {"JWT": []}
+        ]
+      }
+    },
+    "/product/staff/{id}": {
+      "put": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "updateProductById",
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Update product by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "productId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            
+            "schema": {
+              "$ref":"#/definitions/CreateProduct"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": 
+        [
+          {"JWT": []}
+        ]
+      }
+    },
+    "/product/{id}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Get product by id",
+        "operationId": "getProductByid",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "productId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/staff": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get all users",
+          "operationId": "get all users",
+          "produces": [
+            "application/json"
+          ],
+          "parameters":[],
+          "security": [
+            {"JWT": []}
+          ],
+          "responses": {
+            "default": {
+              "description": "successful operation"
+            }
+          }  
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user info by userId",
+        "operationId": "getUserInfoById",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of user that needs to be fetched.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {"JWT": []}
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Updated user",
+        "description": "Update user, This can only be done by the logged in user.",
+        "operationId": "updateUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of user that need to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUser"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid user supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {"JWT": []}
+        ]
+      }
+    },
+    "/user/staff/{id}": {
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in staff, owner.",
+        "operationId": "deleteUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of user that needs to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [{
+          "JWT": []
+        }],
+        "responses": {
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Admin get user",
+        "description": "This can only be done by the logged in staff, owner.",
+        "operationId": "adminGetUserInfoById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of user that needs to be retrieve",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [{
+          "JWT": []
+        }],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/cart/": {
+      "get": {
+        "tags": ["cart"],
+        "summary": "Get all items in cart",
+        "description": "User get all items in cart, this can only be done by logged in user",
+        "operationId": "getItemsInCart",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [{"JWT": []}]
+      },
+      "post": {
+        "tags": ["cart"],
+        "summary": "Add items to cart",
+        "description": "Users can add item to their cart, this can only be done by logged in user",
+        "operationId": "addItemToCart",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "addItemToCart object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddItemToCart"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [{"JWT": []}]
+      },
+      "put": {
+        "tags": ["cart"],
+        "summary": "Update cart",
+        "description": "Update cart item quantity, this can only be done by logged in user",
+        "operationId": "updateCartItem",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "updateCartItem object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCartItem"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [{"JWT": []}]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "JWT": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "imageUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "UserRegister": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        }
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateUser": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        }
+      }
+    },
+    "AddItemToCart": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32" 
+        }
+      }
+    },
+    "UpdateCartItem": {
+      "type": "object",
+      "properties": {
+        "cartItemId": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32" 
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}

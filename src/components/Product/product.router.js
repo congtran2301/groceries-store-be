@@ -11,7 +11,10 @@ const staffRouter = Router();
 staffRouter
   .route('/')
   .get(productController.getProducts)
-  .post(productController.createProduct);
+  .post(
+    validate({ body: productValidationSchema.createProduct }),
+    productController.createProduct
+  );
 staffRouter
   .route('/:id')
   .all(validate({ params: mongoIdSchema }))
@@ -33,6 +36,7 @@ router.get(
   validate({ params: mongoIdSchema }),
   productController.getProductById
 );
+router.post('/search', productController.searchProduct);
 router.get('/', productController.getProducts);
 
 export default router;

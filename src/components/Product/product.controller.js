@@ -11,16 +11,18 @@ const createProduct = async (req, res) => {
       'name',
       'price',
       'categoryId',
-      'imageUrls'
+      'imageUrls',
+      'width',
+      'height',
+      'weight',
+      'length'
     ]);
 
-    let product = await productValidate.validateAsync(productBody);
-
     const category = await categoryServices.getOneCategory({
-      _id: product.categoryId
+      _id: productBody.categoryId
     });
     // create and populate
-    const newProduct = await productServices.createProduct(product, [
+    const newProduct = await productServices.createProduct(productBody, [
       { path: 'category', select: '-_id' }
     ]);
 
@@ -158,11 +160,37 @@ const getProductById = async (req, res) => {
     return error({ res, message: err.message, statusCode: 400 });
   }
 };
+
+const searchProduct = async (req, res) => {
+  try {
+    const { text } = req.body;
+
+    const { count, matchProduct } = await productServices.searchProduct(text);
+
+    let { page, perPage } = paginationServices.handlePaginationFromQuery(req);
+    const totalPage = count / perPage;
+    const pagination = paginationServices.makePaginationData({
+      totalPage,
+      currentPage: page,
+      perPage
+    });
+
+    return success({
+      res,
+      message: 'success',
+      data: matchProduct,
+      pagination
+    });
+  } catch (err) {
+    return error({ res, message: err.message, statusCode: 400 });
+  }
+};
 export default {
   createProduct,
   getProducts,
   updateProductById,
   deleteProductById,
   getProductById,
-  getActiveProducts
+  getActiveProducts,
+  searchProduct
 };

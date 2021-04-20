@@ -6,7 +6,7 @@ const router = Router();
 
 router.post(
   '/',
-  validate(reportValidationSchema.createRevenueReportFromDateToDateSchema),
+  validate(reportValidationSchema.createReportSchema),
   reportController.getReport
 );
 

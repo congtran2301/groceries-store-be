@@ -22,11 +22,33 @@ const getReport = async (req, res) => {
     toDate = new Date(toDate + ' 23:59:59.999');
 
     let reportData;
+
     switch (type) {
       case Types.Product:
         reportData = await reportServices.getRevenueByProduct(fromDate, toDate);
         break;
+      case Types.Category:
+        reportData = await reportServices.getRevenueByCategory(
+          fromDate,
+          toDate
+        );
+        break;
+      case Types.Staff:
+        reportData = await reportServices.getRevenueByStaff(fromDate, toDate);
+        break;
     }
+    return success({
+      res,
+      message: 'Success',
+      data: {
+        time: {
+          fromDate,
+          toDate
+        },
+        reportData
+      },
+      statusCode: 200
+    });
   } catch (err) {
     return error({ res, message: err.message, statusCode: 400 });
   }
