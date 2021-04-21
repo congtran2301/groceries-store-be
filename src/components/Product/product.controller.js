@@ -10,7 +10,9 @@ const createProduct = async (req, res) => {
     const productBody = pick(req.body, [
       'name',
       'price',
+      'description',
       'categoryId',
+      'measureId',
       'imageUrls',
       'width',
       'height',
@@ -150,7 +152,7 @@ const getProductById = async (req, res) => {
       ['staff', 'owner'].indexOf(role) !== -1 ? {} : { isDelete: false };
 
     const query = { _id: id };
-
+    console.log(query);
     const product = await productServices.getOneProduct({
       ...query,
       ...status

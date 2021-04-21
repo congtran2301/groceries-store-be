@@ -13,7 +13,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "igroceries-be.herokuapp.com",
+  "host": "localhost:3000",
   "basePath": "/",
   "tags": [
     {
@@ -38,9 +38,39 @@
     }
   ],
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
+    "/upload/": {
+      "post": {
+        "tags": [
+          "upload"
+        ],
+        "summary": "Upload image",
+        "description": "user can create their new account.",
+        "operationId": "uploadImage",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "formData",
+          "name": "image",
+          "type": "file"
+        }
+      ],
+      "responses": {
+        
+          "default": {
+            "description": "successful operation"
+          }
+
+      }
+    },
     "/auth/register": {
       "post": {
         "tags": [
@@ -87,7 +117,7 @@
             "in": "body",
             "name": "body",
             "description": "user object",
-            "required": false,
+            "required": true,
             "schema": {
               "$ref": "#/definitions/UserLogin"
             }
@@ -116,6 +146,127 @@
             "description": "Invalid username/password supplied"
           }
         }
+      }
+    },
+    "/category/": {
+      "get": {
+        "tags":["category"],
+        "summary": "Get All category",
+        "operationId": "getCategories",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/category/staff": {
+      "post": {
+        "tags":["category"],
+        "summary": "Create new category",
+        "operationId": "createCategory",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "category object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCategory"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {"JWT": []}
+        ]
+      },
+      "get": {
+        "tags":["category"],
+        "summary": "Get All category by admin",
+        "operationId": "adminGetCategories",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "security": [
+          {"JWT": []}
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/category/staff/{id}": {
+      "delete": {
+        "tags":["category"],
+        "summary": "delete category",
+        "operationId": "deleteCategory",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "category object",
+            "required": true
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {"JWT": []}
+        ]
+      },
+      "put": {
+        "tags":["category"],
+        "summary": "update category",
+        "operationId": "updateCategory",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "category id",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "category object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCategory"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {"JWT": []}
+        ]
       }
     },
     "/product/": {
@@ -212,6 +363,34 @@
             "schema": {
               "$ref":"#/definitions/CreateProduct"
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": 
+        [
+          {"JWT": []}
+        ]
+      },
+      "delete": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "updateProductById",
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Update product by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "productId",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -480,7 +659,64 @@
         },
         "security": [{"JWT": []}]
       }
-    }
+    },
+    "/order/": {
+      "get": {
+        "tags": ["order"],
+        "summary": "User get all orders",
+        "parameters": [],
+        "operationId": "getAllOrders",
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [{
+          "JWT": []
+        }]
+      }
+    },
+    "/order/{orderId}": {
+      "get": {
+        "tags": ["order"],
+        "summary": "user get their specific order",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderId",
+            "description": "orderId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "operationId": "getOneOrder",
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [{
+          "JWT": []
+        }]
+      }
+    },
+
+    "/order/staff": {
+      "get": {
+        "tags": ["order"],
+        "summary": "Admin get all user orders",
+        "parameters": [],
+        "operationId": "getAllUserOrders",
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [{
+          "JWT": []
+        }]
+      }
+    }    
   },
   "securityDefinitions": {
     "JWT": {
@@ -523,6 +759,17 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "CreateCategory": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
         }
       }
     },

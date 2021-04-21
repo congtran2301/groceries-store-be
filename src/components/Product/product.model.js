@@ -11,9 +11,16 @@ const productSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'category'
     },
+    measureId: {
+      type: Schema.Types.ObjectId,
+      ref: 'measure'
+    },
     price: {
       type: Number,
       required: true
+    },
+    description: {
+      type: String
     },
     imageUrls: {
       type: Array,
@@ -21,11 +28,6 @@ const productSchema = new Schema(
         'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png'
       ]
     },
-    // measureId: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'Measures',
-    //   required: true
-    // },
     features: {
       type: String
     },
@@ -59,6 +61,11 @@ productSchema.virtual('category', {
   foreignField: '_id',
   justOne: true
 });
-
+productSchema.virtual('measure', {
+  ref: 'measure',
+  localField: 'measureId',
+  foreignField: '_id',
+  justOne: true
+});
 const Product = mongoose.model('product', productSchema);
 export default Product;

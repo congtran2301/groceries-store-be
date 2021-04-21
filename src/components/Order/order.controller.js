@@ -105,9 +105,9 @@ const getOrder = async (req, res) => {
 
     const { orderId } = req.params;
     const userOrder = ['staff', 'owner'].indexOf(role) !== -1 ? {} : { userId };
-
+    console.log({ ...userOrder, orderId });
     const order = await orderServices.getOrder({
-      query: { ...userOrder, orderId },
+      query: { ...userOrder, _id: orderId },
       populations
     });
     return success({ res, message: 'success', data: order });
