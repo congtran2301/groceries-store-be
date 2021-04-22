@@ -2,7 +2,6 @@ import { pick } from 'lodash';
 import { success, error } from '../../common/utils/response';
 import productServices from '../Product/product.services';
 import categoryServices from '../Category/category.services';
-import productValidate from '../Product/product.validation';
 import paginationServices from '../../common/pagination';
 
 const createProduct = async (req, res) => {
