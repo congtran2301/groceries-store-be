@@ -1,8 +1,10 @@
 import express from 'express';
-const router = express.Router();
+import errorHandler from '../../common/middleware/errorHandler';
 import validate from '../../common/middleware/validation';
 import userValidationSchema from '../User/user.validation';
 import authController from './auth.controller';
+
+const router = express.Router();
 
 router.post(
   '/register',

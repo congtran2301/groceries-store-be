@@ -5,7 +5,7 @@ import { pick } from 'lodash';
 import { sign } from 'jsonwebtoken';
 import '../../common/utils/envConfig';
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   try {
     const userBody = pick(req.body, ['username', 'password', 'fullName']);
 
@@ -15,7 +15,7 @@ const register = async (req, res) => {
     });
 
     if (existUser)
-      return error({ res, message: 'Username existed', statusCode: 400 });
+      return next({ res, message: 'Username existed', statusCode: 400 });
 
     const newUser = await userServices.createUser({
       ...userBody,

@@ -148,6 +148,46 @@
         }
       }
     },
+    "/measure/": {
+      "get": {
+        "tags": ["measure"],
+        "summary": "get measures",
+        "parameters": [],
+        "operationId": "getMeasures",
+        "security": [
+          {"JWT": []}
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "post": {
+        "tags": ["measure"],
+        "summary": "create measure",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateMeasure"
+            },
+            "description": "product info",
+            "required": true
+          }
+        ],
+        "operationId": "createMeasure",
+        "security": [
+          {"JWT": []}
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
     "/category/": {
       "get": {
         "tags":["category"],
@@ -741,6 +781,17 @@
         }
       }
     },
+    "CreateMeasure": {
+      "type": "object",
+      "properties": {
+        "sign": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
     "CreateProduct": {
       "type": "object",
       "properties": {
@@ -769,6 +820,9 @@
           "type": "string"
         },
         "description": {
+          "type": "string"
+        },
+        "color": {
           "type": "string"
         }
       }
