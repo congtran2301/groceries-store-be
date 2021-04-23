@@ -1,10 +1,6 @@
 import Product from './product.model';
-/**
- *
- * @param {*} product
- * @param {Product[]} populations
- * @returns {Promise<*>} {a: 123, b: 456}
- */
+import CustomError from '../../common/CustomError';
+
 const createProduct = async (product, populations = []) => {
   const newProduct = new Product(product);
   await newProduct.save();
@@ -27,7 +23,7 @@ const getActiveProducts = async ({ query, pagination, populations = [] }) => {
 
 const getOneProduct = async (query) => {
   const product = await Product.findOne(query);
-  if (!product) throw new Error('Product not found');
+  if (!product) throw new CustomError('Product not found', 404);
   return product;
 };
 

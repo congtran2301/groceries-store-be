@@ -4,7 +4,12 @@ import categoryServices from './category.services';
 
 const createCategory = async (req, res) => {
   try {
-    const categoryBody = pick(req.body, ['name', 'description', 'color']);
+    const categoryBody = pick(req.body, [
+      'name',
+      'description',
+      'color',
+      'imageUrls'
+    ]);
     const newCategory = await categoryServices.createCategory(categoryBody);
     return success({
       res,
@@ -19,7 +24,12 @@ const createCategory = async (req, res) => {
 const updateCategoryById = async (req, res) => {
   try {
     const { id } = req.params;
-    let categoryInfo = pick(req.body, ['name', 'description', 'color']);
+    let categoryInfo = pick(req.body, [
+      'name',
+      'description',
+      'color',
+      'imageUrl'
+    ]);
     const category = await categoryServices.updateCategory(
       {
         _id: id

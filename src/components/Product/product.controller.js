@@ -142,7 +142,7 @@ const deleteProductById = async (req, res) => {
     return error({ res, message: err.message, statusCode: 400 });
   }
 };
-const getProductById = async (req, res) => {
+const getProductById = async (req, res, next) => {
   try {
     const role = req.user ? req.user.role : null;
     const { id } = req.params;
@@ -151,14 +151,13 @@ const getProductById = async (req, res) => {
       ['staff', 'owner'].indexOf(role) !== -1 ? {} : { isDelete: false };
 
     const query = { _id: id };
-    console.log(query);
     const product = await productServices.getOneProduct({
       ...query,
       ...status
     });
     return success({ res, message: 'Success', data: product });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    next(err);
   }
 };
 

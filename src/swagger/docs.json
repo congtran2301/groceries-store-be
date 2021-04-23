@@ -700,6 +700,31 @@
         "security": [{"JWT": []}]
       }
     },
+    "/report/": {
+      "post" : {
+        "operationId": "getReport",
+        "tags": ["report"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "create a report",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetReport"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {"JWT":[]}
+        ]
+      }
+    },
     "/order/": {
       "get": {
         "tags": ["order"],
@@ -781,6 +806,21 @@
         }
       }
     },
+    "GetReport": {
+      "type":"object",
+      "properties": {
+        "fromDate": {
+          "type": "string"
+        },
+        "toDate": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["category", "product", "staff"]
+        }
+      }
+    },
     "CreateMeasure": {
       "type": "object",
       "properties": {
@@ -823,6 +863,9 @@
           "type": "string"
         },
         "color": {
+          "type": "string"
+        },
+        "imageUrls": {
           "type": "string"
         }
       }

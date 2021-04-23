@@ -4,6 +4,7 @@ import { success, error } from '../../common/utils/response';
 import { pick } from 'lodash';
 import { sign } from 'jsonwebtoken';
 import '../../common/utils/envConfig';
+import CustomError from '../../common/CustomError';
 
 const register = async (req, res, next) => {
   try {
@@ -14,8 +15,7 @@ const register = async (req, res, next) => {
       status: 'active'
     });
 
-    if (existUser)
-      return next({ res, message: 'Username existed', statusCode: 400 });
+    if (existUser) throw new CustomError('user existed', 400);
 
     const newUser = await userServices.createUser({
       ...userBody,
@@ -30,7 +30,7 @@ const register = async (req, res, next) => {
       statusCode: 200
     });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    return next(err);
   }
 };
 const login = async (req, res) => {

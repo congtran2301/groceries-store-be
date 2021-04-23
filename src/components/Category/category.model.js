@@ -15,6 +15,11 @@ const categorySchema = new Schema(
       type: String,
       default: 'rgba(224, 224, 224, 0.25)'
     },
+    imageUrl: {
+      type: String,
+      default:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png'
+    },
     isDelete: {
       type: Boolean,
       default: false

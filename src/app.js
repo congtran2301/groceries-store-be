@@ -19,6 +19,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-app.use('/', indexRouter, errorHandler);
+app.use('/', indexRouter);
+app.use(errorHandler);
 
 export default app;

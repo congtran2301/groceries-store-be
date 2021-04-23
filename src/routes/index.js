@@ -23,6 +23,6 @@ router.use('/staff', staffRouter);
 router.use('/order', orderRouter);
 router.use('/report', reportRouter);
 router.use('/measure', measureRouter);
-router.use('/swagger', swaggerRouter);
+router.use('/docs', swaggerRouter);
 
 export default router;

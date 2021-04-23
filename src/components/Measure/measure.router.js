@@ -7,6 +7,7 @@ import measureValidationSchema from './measure.validation';
 
 const router = Router();
 
+router.use(authServices.isAuthentication, authServices.hasStaffPermission);
 router.post(
   '/',
   validate(measureValidationSchema.createMeasure),
