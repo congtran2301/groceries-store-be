@@ -1,15 +1,8 @@
 import passport from 'passport';
+import CustomError from '../../common/CustomError';
 import { unauthorized } from '../../common/utils/response';
 
-const isAuthentication = async (req, res, next) => {
-  try {
-    await passport.authenticate('jwt', {
-      session: false
-    })(req, res, next);
-  } catch (error) {
-    return unauthorized({ res });
-  }
-};
+const isAuthentication = passport.authenticate('jwt', { session: false });
 
 const hasOwnerPermission = (req, res, next) => {
   const { role } = req.user;
