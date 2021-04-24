@@ -1,10 +1,19 @@
 import passport from 'passport';
 import { unauthorized } from '../../common/utils/response';
 
-const isAuthentication = passport.authenticate('jwt', { session: false });
+const isAuthentication = async (req, res, next) => {
+  try {
+    await passport.authenticate('jwt', {
+      session: false
+    })(req, res, next);
+  } catch (error) {
+    return unauthorized({ res });
+  }
+};
 
 const hasOwnerPermission = (req, res, next) => {
   const { role } = req.user;
+  console.log('role');
   if (role !== 'owner') return unauthorized({ res });
   next();
 };
