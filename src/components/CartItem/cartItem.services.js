@@ -15,7 +15,18 @@ const updateCartItem = async (query, data) => {
   return await CartItem.findOneAndUpdate(query, data);
 };
 const getCartItemsByCartId = async (cartId) => {
-  return await CartItem.find({ cartId });
+  // return await CartItem.find({ cartId }, null, [
+  //   { path: 'product', select: ['name', 'price', 'imageUrls', 'measureId'] }
+  // ]);
+  return await CartItem.find({ cartId })
+    .populate([
+      {
+        path: 'product',
+        select: ['name', 'price', 'imageUrls', 'measureId'],
+        populate: { path: 'measure', select: ['sign', 'description'] }
+      }
+    ])
+    .exec();
 };
 const getOneCartItem = async (query) => {
   return await CartItem.findOne(query);

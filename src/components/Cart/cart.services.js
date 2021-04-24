@@ -13,22 +13,6 @@ const getCartByUserId = async (userId) => {
   return await Cart.findOne({ userId });
 };
 
-// const updateCartProductQuantity = async ({ cartItemId, quantity }) => {
-//   return await CartItem.findByIdAndUpdate(
-//     { _id: cartItemId },
-//     { quantity },
-//     { new: true }
-//   )
-// }
-// const createCartItem = async ({ productId, cartId, quantity }) => {
-//   const newCartProduct = new CartItem({
-//     productId,
-//     cartId,
-//     quantity
-//   })
-//   await newCartProduct.save()
-//   return newCartProduct
-// }
 export default {
   createEmptyCart,
   getCartByUserId

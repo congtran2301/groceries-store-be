@@ -10,7 +10,7 @@ const createProduct = async (product, populations = []) => {
 const getProducts = async ({ query, pagination, populations = [] }) => {
   const { page, perPage } = pagination;
   const skip = (page - 1) * perPage;
-  return await Product.find(query).skip(skip).limit(perPage);
+  return await Product.find(query).skip(skip).limit(perPage).exec();
 };
 
 const getActiveProducts = async ({ query, pagination, populations = [] }) => {
