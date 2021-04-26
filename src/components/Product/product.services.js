@@ -1,6 +1,17 @@
 import Product from './product.model';
 import CustomError from '../../common/CustomError';
 
+// const populateOptions = {
+// category: {
+// path: 'category',
+// select: ['color', 'imageUrl', 'name', 'description']
+// },
+// measure: {
+// path: 'measure',
+// select: ['sign', 'description']
+// }
+// };
+
 const createProduct = async (product, populations = []) => {
   const newProduct = new Product(product);
   await newProduct.save();
@@ -10,7 +21,10 @@ const createProduct = async (product, populations = []) => {
 const getProducts = async ({ query, pagination, populations = [] }) => {
   const { page, perPage } = pagination;
   const skip = (page - 1) * perPage;
-  return await Product.find(query).skip(skip).limit(perPage).exec();
+  return await Product.find(query, null, { populate: populations })
+    .skip(skip)
+    .limit(perPage)
+    .exec();
 };
 
 const getActiveProducts = async ({ query, pagination, populations = [] }) => {
@@ -21,12 +35,22 @@ const getActiveProducts = async ({ query, pagination, populations = [] }) => {
     .limit(perPage);
 };
 
-const getOneProduct = async (query) => {
-  const product = await Product.findOne(query);
-  if (!product) throw new CustomError('Product not found', 404);
+const getProduct = async (query) => {
+  const product = await Product.findOne(query, null, {
+    populate: [
+      {
+        path: 'category',
+        select: ['color', 'imageUrl', 'name', 'description']
+      },
+      {
+        path: 'measure',
+        select: ['sign', 'description']
+      }
+    ]
+  });
+  if (!product) throw new CustomError('Product not found', 400);
   return product;
 };
-
 const countProducts = async (query = {}) => {
   return await Product.countDocuments(query);
 };
@@ -63,7 +87,7 @@ export default {
   getActiveProducts,
   countProducts,
   createProduct,
-  getOneProduct,
+  getProduct,
   deleteProduct,
   updateProduct,
   searchProduct

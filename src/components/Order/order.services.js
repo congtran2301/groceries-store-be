@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cartServices from '../Cart/cart.services';
 import cartItemServices from '../CartItem/cartItem.services';
 import CartItem from '../CartItem/cartItem.model';
+import CustomError from '../../common/CustomError';
 const createOrderAndPushProductsToOrder = async ({
   userId,
   products,
@@ -50,15 +51,31 @@ const updateOrder = async (query, data) => {
   return await Order.findOneAndUpdate(query, data, { new: true });
 };
 
-const getOrders = async ({ query, pagination, populations = [] }) => {
+const getOrders = async ({ query, pagination }) => {
   const { page, perPage } = pagination;
   const skip = (page - 1) * perPage;
-  return await Order.find(query, null, { populate: populations })
+  return await Order.find(query, null, {
+    populate: [
+      {
+        path: 'products.product',
+        select: 'name price'
+      }
+    ]
+  })
     .skip(skip)
     .limit(perPage);
 };
-const getOrder = async ({ query, populations = [] }) => {
-  return await Order.findOne(query, null, { populate: populations });
+const getOrder = async (query) => {
+  const order = await Order.findOne(query, null, {
+    populate: [
+      {
+        path: 'products.product',
+        select: 'name price'
+      }
+    ]
+  });
+  if (!order) throw new CustomError('Order not found', 400);
+  return order;
 };
 const countOrders = async (query = {}) => {
   return await Order.countDocuments(query);

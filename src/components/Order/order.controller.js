@@ -5,7 +5,7 @@ import paginationServices from '../../common/pagination';
 import handleDuplicateProduct from '../../common/utils/handleDuplicateProduct';
 import orderServices from './order.services';
 
-const createOrder = async (req, res) => {
+const createOrder = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const orderBody = pick(req.body, ['address', 'phone', 'productIds']);
@@ -14,7 +14,7 @@ const createOrder = async (req, res) => {
 
     const products = await Promise.all(
       productOrderDetail.map(async (prod) => {
-        const product = await productServices.getOneProduct({
+        const product = await productServices.getProduct({
           _id: prod.id
         });
         return {
@@ -33,11 +33,11 @@ const createOrder = async (req, res) => {
     });
     return success({ res, message: 'success', data: order });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    next(err);
   }
 };
 
-const updateOrder = async (req, res) => {
+const updateOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
@@ -50,21 +50,14 @@ const updateOrder = async (req, res) => {
     await orderServices.updateOrder({ _id: id }, updateData);
     return success({ res, message: 'update success', statusCode: 200 });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    return next(err);
   }
 };
 
-const getOrders = async (req, res) => {
+const getOrders = async (req, res, next) => {
   try {
-    console.log('get order controller');
     const role = req.user.role;
     const userId = req.user._id;
-    const populations = [
-      {
-        path: 'products.product',
-        select: 'name price'
-      }
-    ];
 
     const userOrder = ['staff', 'owner'].indexOf(role) !== -1 ? {} : { userId };
 
@@ -72,8 +65,7 @@ const getOrders = async (req, res) => {
 
     const orders = await orderServices.getOrders({
       query: { ...userOrder },
-      pagination: { page, perPage },
-      populations
+      pagination: { page, perPage }
     });
 
     const numberOfOrders = await orderServices.countOrders();
@@ -87,7 +79,7 @@ const getOrders = async (req, res) => {
 
     return success({ res, message: 'success', data: orders, pagination });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    next(err);
   }
 };
 
@@ -95,20 +87,11 @@ const getOrder = async (req, res) => {
   try {
     const role = req.user.role;
     const userId = req.user._id;
-    const populations = [
-      {
-        path: 'products.product',
-        select: 'name price'
-      }
-    ];
 
     const { id } = req.params;
     const userOrder = ['staff', 'owner'].indexOf(role) !== -1 ? {} : { userId };
     console.log({ ...userOrder, id });
-    const order = await orderServices.getOrder({
-      query: { ...userOrder, _id: id },
-      populations
-    });
+    const order = await orderServices.getOrder({ ...userOrder, _id: id });
     return success({ res, message: 'success', data: order });
   } catch (err) {
     return error({ res, message: err.message, statusCode: 400 });

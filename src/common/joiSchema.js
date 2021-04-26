@@ -6,7 +6,7 @@ export const mongoId = Joi.string()
 
 export const isoDate = Joi.date().iso();
 
-export const positiveNumber = Joi.number().integer().min(1);
+export const positiveNumber = Joi.number().min(0);
 
 export const mongoIdSchema = Joi.object({
   id: Joi.string()

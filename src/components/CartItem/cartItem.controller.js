@@ -10,7 +10,7 @@ const addItemToCart = async (req, res) => {
     const cartItem = pick(req.body, ['productId', 'quantity']);
 
     const cart = await cartServices.getCartByUserId(userId);
-    const product = await productServices.getOneProduct({
+    const product = await productServices.getProduct({
       _id: cartItem.productId
     });
 

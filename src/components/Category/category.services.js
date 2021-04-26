@@ -1,4 +1,5 @@
-import Category from "./category.model";
+import Category from './category.model';
+import CustomError from '../../common/CustomError';
 
 const createCategory = async (category) => {
   const newCategory = new Category(category);
@@ -7,7 +8,7 @@ const createCategory = async (category) => {
 };
 const getOneCategory = async (query) => {
   const category = await Category.findOne(query);
-  if (!category) throw new Error("Category does not exist");
+  if (!category) throw new CustomError('Category does not exist', 400);
   return category;
 };
 
@@ -34,5 +35,5 @@ export default {
   getActiveCategories,
   getOneCategory,
   deleteCategory,
-  updateCategory,
+  updateCategory
 };

@@ -1,10 +1,6 @@
 import Order from '../Order/order.model';
 
 const getProfitByDay = async (fromDate, toDate) => {
-  const from = new Date(fromDate);
-  const to = new Date(toDate);
-  console.log(from);
-  console.log(to);
   const reportData = await Order.aggregate()
     .match({ $and: [{ date: { $gte: fromDate } }, { date: { $lte: toDate } }] })
     .group({
@@ -12,7 +8,7 @@ const getProfitByDay = async (fromDate, toDate) => {
       totalOrders: { $sum: 1 },
       totalRevenue: { $sum: '$totalPrice' }
     });
-  console.log(reportData);
+  return reportData;
 };
 const getRevenueByProduct = async (fromDate, toDate) => {
   const reportData = await Order.aggregate()
@@ -72,7 +68,13 @@ const getRevenueByCategory = async (fromDate, toDate) => {
     .group({
       _id: '$categoryInfo._id',
       totalRevenue: { $sum: '$products.price' },
-      categoryInfo: { $first: '$categoryInfo' }
+      categoryInfo: { $first: '$categoryInfo' },
+      totalOrder: { $addToSet: '$_id' }
+    })
+    .project({
+      totalRevenue: 1,
+      categoryInfo: 1,
+      totalOrder: { $size: '$totalOrder' }
     });
   return reportData;
 };
@@ -94,11 +96,13 @@ const getRevenueByStaff = async (fromDate, toDate) => {
     .group({
       _id: '$staffId',
       totalRevenue: { $sum: '$totalPrice' },
-      staffInfo: { $first: '$staffInfo' }
+      staffInfo: { $first: '$staffInfo' },
+      totalOrder: { $addToSet: '$_id' }
     })
     .project({
       totalRevenue: 1,
-      staffInfo: { $first: '$staffInfo' }
+      staffInfo: { $first: '$staffInfo' },
+      totalOrder: { $size: '$totalOrder' }
     });
   return reportData;
 };

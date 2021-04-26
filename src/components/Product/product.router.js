@@ -5,6 +5,7 @@ import authServices from '../Auth/auth.services';
 import productValidationSchema from './product.validation';
 import validate from '../../common/middleware/validation';
 import RequestTypes from '../../common/requestTypes';
+import commonValidation from '../../common/validation';
 
 const router = Router();
 const staffRouter = Router();
@@ -18,10 +19,10 @@ staffRouter
   );
 staffRouter
   .route('/:id')
-  .all(validate({ params: mongoIdSchema }))
+  .all(validate(commonValidation.paramsIdSchema))
   .get(productController.getProductById)
   .put(
-    validate({ body: productValidationSchema.createProduct }),
+    validate(productValidationSchema.updateProduct),
     productController.updateProductById
   )
   .delete(productController.deleteProductById);
@@ -34,7 +35,7 @@ router.use(
 );
 router.get(
   '/:id',
-  validate({ [RequestTypes.Params]: mongoIdSchema }),
+  validate(commonValidation.paramsIdSchema),
   productController.getProductById
 );
 router.post('/search', productController.searchProduct);

@@ -3,8 +3,9 @@ import { success, error } from '../../common/utils/response';
 import productServices from '../Product/product.services';
 import categoryServices from '../Category/category.services';
 import paginationServices from '../../common/pagination';
+import measureServices from '../Measure/measure.services';
 
-const createProduct = async (req, res) => {
+const createProduct = async (req, res, next) => {
   try {
     const productBody = pick(req.body, [
       'name',
@@ -19,14 +20,15 @@ const createProduct = async (req, res) => {
       'length',
       'status'
     ]);
-
-    const category = await categoryServices.getOneCategory({
+    //verify category and measure is exist
+    await categoryServices.getOneCategory({
       _id: productBody.categoryId
     });
-    // create and populate
-    const newProduct = await productServices.createProduct(productBody, [
-      { path: 'category', select: '-_id' }
-    ]);
+    await measureServices.getMeasure({
+      _id: productBody.measureId
+    });
+
+    const newProduct = await productServices.createProduct(productBody);
 
     return success({
       res,
@@ -35,11 +37,11 @@ const createProduct = async (req, res) => {
       statusCode: 201
     });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    return next(err);
   }
 };
 
-const getProducts = async (req, res) => {
+const getProducts = async (req, res, next) => {
   try {
     const role = req.user ? req.user.role : null;
     const getProductsService =
@@ -71,51 +73,34 @@ const getProducts = async (req, res) => {
       statusCode: 200
     });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    next(err);
   }
 };
-const getActiveProducts = async (req, res) => {
-  try {
-    let { page, perPage } = paginationServices.handlePaginationFromQuery(req);
 
-    const products = await productServices.getActiveProducts(
-      {},
-      { page, perPage }
-    );
-    const numberOfProducts = await productServices.countProducts();
-
-    const totalPage = Math.ceil(numberOfProducts / perPage);
-
-    const pagination = paginationServices.makePaginationData({
-      totalPage,
-      currentPage: page,
-      perPage
-    });
-    return success({
-      res,
-      message: 'Get products successully',
-      data: products,
-      pagination,
-      statusCode: 200
-    });
-  } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
-  }
-};
-const updateProductById = async (req, res) => {
+const updateProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const productInfo = pick(req.body, [
+    const productBody = pick(req.body, [
       'name',
       'price',
       'categoryId',
+      'measureId',
+      'status',
       'imageUrls'
     ]);
 
+    //verify category and measure is exist
+    await categoryServices.getOneCategory({
+      _id: productBody.categoryId
+    });
+    await measureServices.getMeasure({
+      _id: productBody.measureId
+    });
+
     const product = await productServices.updateProduct(
       { _id: id },
-      productInfo
+      productBody
     );
     return success({
       res,
@@ -124,10 +109,10 @@ const updateProductById = async (req, res) => {
       statusCode: 200
     });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    return next(err);
   }
 };
-const deleteProductById = async (req, res) => {
+const deleteProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { isDelete } = await productServices.deleteProduct({ _id: id });
@@ -140,7 +125,7 @@ const deleteProductById = async (req, res) => {
         statusCode: 200
       });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    return next(err);
   }
 };
 const getProductById = async (req, res, next) => {
@@ -152,7 +137,7 @@ const getProductById = async (req, res, next) => {
       ['staff', 'owner'].indexOf(role) !== -1 ? {} : { isDelete: false };
 
     const query = { _id: id };
-    const product = await productServices.getOneProduct({
+    const product = await productServices.getProduct({
       ...query,
       ...status
     });
@@ -162,7 +147,7 @@ const getProductById = async (req, res, next) => {
   }
 };
 
-const searchProduct = async (req, res) => {
+const searchProduct = async (req, res, next) => {
   try {
     const { text } = req.body;
 
@@ -183,7 +168,7 @@ const searchProduct = async (req, res) => {
       pagination
     });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    return next(err);
   }
 };
 export default {
@@ -192,6 +177,5 @@ export default {
   updateProductById,
   deleteProductById,
   getProductById,
-  getActiveProducts,
   searchProduct
 };
