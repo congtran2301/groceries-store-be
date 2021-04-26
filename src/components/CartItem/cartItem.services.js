@@ -3,15 +3,38 @@ import CartItem from './cartItem.model';
 const addItemToCart = async ({ cartId, productId, quantity }) => {
   const cartItem = new CartItem({ cartId, productId, quantity });
   await cartItem.save();
-  return cartItem.populate([
-    {
-      path: ['product'],
-      select: ['name', 'price', 'imageUrls', 'measureId', 'isDelete', 'status']
-    }
-  ]);
+  return await cartItem
+    .populate([
+      {
+        path: 'product',
+        select: [
+          'name',
+          'price',
+          'imageUrls',
+          'measureId',
+          'isDelete',
+          'status'
+        ]
+      }
+    ])
+    .execPopulate();
 };
 const updateCartItem = async (query, data) => {
-  return await CartItem.findOneAndUpdate(query, data, { new: true });
+  return await CartItem.findOneAndUpdate(query, data, { new: true })
+    .populate([
+      {
+        path: 'product',
+        select: [
+          'name',
+          'price',
+          'imageUrls',
+          'measureId',
+          'isDelete',
+          'status'
+        ]
+      }
+    ])
+    .exec();
 };
 const deleteCartItem = async (query) => {
   return await CartItem.findOneAndRemove(query);

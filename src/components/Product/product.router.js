@@ -13,7 +13,7 @@ staffRouter
   .route('/')
   .get(productController.getProducts)
   .post(
-    validate({ body: productValidationSchema.createProduct }),
+    validate(productValidationSchema.createProduct),
     productController.createProduct
   );
 staffRouter
