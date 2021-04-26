@@ -877,6 +877,11 @@
           "items": {
             "type": "string"
           }
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [0, 1, 2]
         }
       }
     },

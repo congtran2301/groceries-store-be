@@ -3,7 +3,12 @@ import CartItem from './cartItem.model';
 const addItemToCart = async ({ cartId, productId, quantity }) => {
   const cartItem = new CartItem({ cartId, productId, quantity });
   await cartItem.save();
-  return cartItem;
+  return cartItem.populate([
+    {
+      path: ['product'],
+      select: ['name', 'price', 'imageUrls', 'measureId', 'isDelete', 'status']
+    }
+  ]);
 };
 const updateCartItem = async (query, data) => {
   return await CartItem.findOneAndUpdate(query, data, { new: true });
@@ -16,7 +21,14 @@ const getCartItemsByCartId = async (cartId) => {
     .populate([
       {
         path: 'product',
-        select: ['name', 'price', 'imageUrls', 'measureId'],
+        select: [
+          'name',
+          'price',
+          'imageUrls',
+          'measureId',
+          'isDelete',
+          'status'
+        ],
         populate: { path: 'measure', select: ['sign', 'description'] }
       }
     ])

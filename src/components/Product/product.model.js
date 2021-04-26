@@ -50,6 +50,11 @@ const productSchema = new Schema(
     isDelete: {
       type: Boolean,
       default: false
+    },
+    status: {
+      type: Number,
+      default: 0,
+      enum: [0, 1, 2]
     }
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }

@@ -3,17 +3,20 @@ import orderController from './order.controller';
 import authServices from '../Auth/auth.services';
 import validate from '../../common/middleware/validation';
 import orderValidationSchema from './order.validation';
+import commonValidation from '../../common/validation';
 
 const router = Router();
 const staffRouter = Router();
 
 staffRouter.get('/', orderController.getOrders);
-staffRouter.get('/:id', orderController.getOrder);
-staffRouter.put(
-  '/:orderId',
-  validate({ body: orderValidationSchema.updateOrder }),
-  orderController.updateOrder
-);
+staffRouter
+  .route('/:id')
+  .all(validate(commonValidation.paramsIdSchema))
+  .get(orderController.getOrder)
+  .put(
+    validate(orderValidationSchema.updateOrder),
+    orderController.updateOrder
+  );
 
 router.use(
   '/staff',
@@ -21,15 +24,20 @@ router.use(
   authServices.hasStaffPermission,
   staffRouter
 );
+
 router.use(authServices.isAuthentication);
-router.get('/', orderController.getOrders);
-router.get('/:orderId', orderController.getOrder);
-router.post(
-  '/',
-  validate({
-    body: orderValidationSchema.createOrder
-  }),
-  orderController.createOrder
+router
+  .route('/')
+  .get(orderController.getOrders)
+  .post(
+    validate(orderValidationSchema.createOrder),
+    orderController.createOrder
+  );
+
+router.get(
+  '/:id',
+  validate(validate(commonValidation.paramsIdSchema)),
+  orderController.getOrder
 );
 
 export default router;

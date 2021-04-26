@@ -16,7 +16,8 @@ const createProduct = async (req, res) => {
       'width',
       'height',
       'weight',
-      'length'
+      'length',
+      'status'
     ]);
 
     const category = await categoryServices.getOneCategory({

@@ -10,6 +10,7 @@ const createProduct = Joi.object({
   length: positiveNumber.message('Length must be greater than or equal to 0'),
   categoryId: mongoId.required(),
   measureId: mongoId,
+  status: Joi.number().valid(0, 1, 2),
   imageUrls: Joi.array().items(Joi.string()).required()
 });
 export default { createProduct };

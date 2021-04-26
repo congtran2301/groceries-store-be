@@ -39,8 +39,7 @@ const createOrder = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   try {
-    console.log('update order');
-    const { orderId } = req.params;
+    const { id } = req.params;
     const updateData = req.body;
     const staffId = req.user._id;
 
@@ -48,7 +47,7 @@ const updateOrder = async (req, res) => {
       updateData.staffId = staffId;
     }
 
-    await orderServices.updateOrder({ _id: orderId }, updateData);
+    await orderServices.updateOrder({ _id: id }, updateData);
     return success({ res, message: 'update success', statusCode: 200 });
   } catch (err) {
     return error({ res, message: err.message, statusCode: 400 });
@@ -103,11 +102,11 @@ const getOrder = async (req, res) => {
       }
     ];
 
-    const { orderId } = req.params;
+    const { id } = req.params;
     const userOrder = ['staff', 'owner'].indexOf(role) !== -1 ? {} : { userId };
-    console.log({ ...userOrder, orderId });
+    console.log({ ...userOrder, id });
     const order = await orderServices.getOrder({
-      query: { ...userOrder, _id: orderId },
+      query: { ...userOrder, _id: id },
       populations
     });
     return success({ res, message: 'success', data: order });
