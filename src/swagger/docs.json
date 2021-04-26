@@ -13,7 +13,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "igroceries-be.herokuapp.com",
+  "host": "localhost:3000",
   "basePath": "/",
   "tags": [
     {
@@ -690,6 +690,33 @@
             "schema": {
               "$ref": "#/definitions/UpdateCartItem"
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "security": [{"JWT": []}]
+      }
+      
+    },
+    "/cart/{id}": {
+      "delete": {
+        "tags": ["cart"],
+        "summary": "Delete cart item",
+        "description": "Delete cart item, this can only be done by logged in user",
+        "operationId": "deleteCartItem",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "cartItemId",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {

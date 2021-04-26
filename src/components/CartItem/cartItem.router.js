@@ -10,16 +10,18 @@ router.use(authServices.isAuthentication);
 router
   .route('/')
   .put(
-    validate({
-      body: cartItemValidationSchema.updateCartItemSchema
-    }),
+    validate(cartItemValidationSchema.updateCartItemSchema),
     cartItemController.updateCart
   )
   .post(
-    validate({
-      body: cartItemValidationSchema.addToCartSchema
-    }),
+    validate(cartItemValidationSchema.addToCartSchema),
     cartItemController.addItemToCart
+  );
+router
+  .route('/:id')
+  .delete(
+    validate(cartItemValidationSchema.deleteCartItemSchema),
+    cartItemController.deleteCartItemByCartItemId
   );
 
 export default router;

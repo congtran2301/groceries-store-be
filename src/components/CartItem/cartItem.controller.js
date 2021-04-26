@@ -18,21 +18,26 @@ const addItemToCart = async (req, res) => {
       cartId: cart._id,
       productId: product._id
     });
-
+    let newCartItem;
     if (!productExistInCart) {
-      await cartItemServices.addItemToCart({
+      newCartItem = await cartItemServices.addItemToCart({
         cartId: cart._id,
         productId: product._id,
         quantity: cartItem.quantity
       });
     } else {
       let quantity = productExistInCart.quantity + cartItem.quantity;
-      await cartItemServices.updateCartItem(
+      newCartItem = await cartItemServices.updateCartItem(
         { _id: productExistInCart._id },
         { quantity }
       );
     }
-    return success({ res, message: 'Success' });
+    return success({
+      res,
+      message: 'Success',
+      data: newCartItem,
+      statusCode: 201
+    });
   } catch (err) {
     return error({ res, message: err.message, statusCode: 400 });
   }
@@ -40,7 +45,6 @@ const addItemToCart = async (req, res) => {
 const updateCart = async (req, res) => {
   try {
     const userId = req.user._id;
-
     const updateCartItem = pick(req.body, ['cartItemId', 'quantity']);
 
     const cart = await cartServices.getCartByUserId(userId);
@@ -54,8 +58,23 @@ const updateCart = async (req, res) => {
     return error({ res, message: err.message, statusCode: 400 });
   }
 };
+const deleteCartItemByCartItemId = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userId = req.user._id;
+    const cart = await cartServices.getCartByUserId(userId);
+
+    await cartItemServices.deleteCartItem({ _id: id, cartId: cart._id });
+
+    return success({ res, message: 'Success' });
+  } catch (error) {
+    return error({ res, message: err.message, statusCode: 400 });
+  }
+};
 
 export default {
   addItemToCart,
-  updateCart
+  updateCart,
+  deleteCartItemByCartItemId
 };

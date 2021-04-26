@@ -4,6 +4,7 @@ import productController from './product.controller';
 import authServices from '../Auth/auth.services';
 import productValidationSchema from './product.validation';
 import validate from '../../common/middleware/validation';
+import RequestTypes from '../../common/requestTypes';
 
 const router = Router();
 const staffRouter = Router();
@@ -33,7 +34,7 @@ router.use(
 );
 router.get(
   '/:id',
-  validate({ params: mongoIdSchema }),
+  validate({ [RequestTypes.Params]: mongoIdSchema }),
   productController.getProductById
 );
 router.post('/search', productController.searchProduct);

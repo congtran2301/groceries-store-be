@@ -1,12 +1,23 @@
 import Joi from 'joi';
-import { mongoId } from '../../common/joiSchema';
-const addToCartSchema = Joi.object({
-  productId: mongoId,
-  quantity: Joi.required()
-});
-const updateCartItemSchema = Joi.object({
-  cartItemId: mongoId,
-  quantity: Joi.required()
-});
+import { mongoId, mongoIdSchema } from '../../common/joiSchema';
+import RequestTypes from '../../common/requestTypes';
 
-export default { addToCartSchema, updateCartItemSchema };
+const addToCartSchema = {
+  [RequestTypes.Body]: Joi.object({
+    productId: mongoId,
+    quantity: Joi.required()
+  })
+};
+
+const updateCartItemSchema = {
+  [RequestTypes.Body]: Joi.object({
+    cartItemId: mongoId,
+    quantity: Joi.required()
+  })
+};
+
+const deleteCartItemSchema = {
+  [RequestTypes.Params]: mongoIdSchema
+};
+
+export default { addToCartSchema, updateCartItemSchema, deleteCartItemSchema };
