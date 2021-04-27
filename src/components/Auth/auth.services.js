@@ -6,7 +6,6 @@ const isAuthentication = passport.authenticate('jwt', { session: false });
 
 const hasOwnerPermission = (req, res, next) => {
   const { role } = req.user;
-  console.log('role');
   if (role !== 'owner') return unauthorized({ res });
   next();
 };

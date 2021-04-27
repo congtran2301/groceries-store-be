@@ -1,5 +1,4 @@
 import Cart from '../Cart/cart.model';
-import CartItem from '../CartItem/cartItem.model';
 
 const createEmptyCart = async (userId) => {
   const cart = new Cart({

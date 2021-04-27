@@ -68,11 +68,10 @@ const getOrders = async (req, res, next) => {
       pagination: { page, perPage }
     });
 
-    const numberOfOrders = await orderServices.countOrders();
-    const totalPage = Math.ceil(numberOfOrders / perPage);
+    const numberOfDocument = await orderServices.countOrders();
 
     const pagination = paginationServices.makePaginationData({
-      totalPage,
+      numberOfDocument,
       currentPage: page,
       perPage
     });

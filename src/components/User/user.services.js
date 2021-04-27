@@ -41,6 +41,9 @@ const deleteStaff = async (query) => {
 const countUsers = async (query) => {
   return await User.countDocuments({ ...query, role: 'user' });
 };
+const countStaffs = async (query) => {
+  return await User.countDocuments({ ...query, role: 'staff' });
+};
 
 export default {
   getOneUser,
@@ -48,6 +51,7 @@ export default {
   getUsers,
   getStaffs,
   countUsers,
+  countStaffs,
   updateUser,
   deleteUser,
   deleteStaff

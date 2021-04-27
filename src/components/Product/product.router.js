@@ -1,10 +1,8 @@
 import { Router } from 'express';
-import { mongoIdSchema } from '../../common/joiSchema';
 import productController from './product.controller';
 import authServices from '../Auth/auth.services';
 import productValidationSchema from './product.validation';
 import validate from '../../common/middleware/validation';
-import RequestTypes from '../../common/requestTypes';
 import commonValidation from '../../common/validation';
 
 const router = Router();
@@ -33,12 +31,12 @@ router.use(
   authServices.hasStaffPermission,
   staffRouter
 );
+router.get('/search', productController.searchProduct);
 router.get(
   '/:id',
   validate(commonValidation.paramsIdSchema),
   productController.getProductById
 );
-router.post('/search', productController.searchProduct);
 router.get('/', productController.getProducts);
 
 export default router;

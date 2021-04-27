@@ -33,21 +33,15 @@ const register = async (req, res, next) => {
     return next(err);
   }
 };
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const { username, password } = pick(req.body, ['username', 'password']);
 
     const user = await userServices.getOneUser({ username, status: 'active' });
-    if (!user)
-      return error({
-        res,
-        message: 'Username does not existed',
-        statusCode: 400
-      });
+    if (!user) throw new CustomError('Username does not exist', 400);
 
     const correctPassword = await user.validatePassword(password);
-    if (!correctPassword)
-      return error({ res, message: 'Wrong password', statusCode: 400 });
+    if (!correctPassword) throw new CustomError('Wrong password', 400);
 
     const userInfo = pick(user, ['username', 'fullName', 'role']);
     const token = sign(userInfo, process.env.MY_SECRET, { expiresIn: '20d' });
@@ -58,7 +52,7 @@ const login = async (req, res) => {
       statusCode: 200
     });
   } catch (err) {
-    return error({ res, message: err.message, statusCode: 400 });
+    return next(err);
   }
 };
 

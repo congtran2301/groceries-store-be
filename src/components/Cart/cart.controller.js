@@ -4,7 +4,6 @@ import cartServices from './cart.services';
 
 const getCart = async (req, res) => {
   try {
-    console.log('getCart');
     const userId = req.user._id;
     const cart = await cartServices.getCartByUserId(userId);
     const cartItems = await cartItemServices.getCartItemsByCartId(cart._id);

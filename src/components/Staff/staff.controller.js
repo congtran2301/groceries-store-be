@@ -16,10 +16,9 @@ const getStaffs = async (req, res) => {
       fields
     });
 
-    const numberOfStaffs = await userServices.countUsers();
-    const totalPage = Math.ceil(numberOfStaffs / perPage);
+    const numberOfDocument = await userServices.countStaffs();
     const pagination = paginationServices.makePaginationData({
-      totalPage,
+      numberOfDocument,
       currentPage: page,
       perPage
     });

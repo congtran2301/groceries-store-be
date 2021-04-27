@@ -56,12 +56,10 @@ const getProducts = async (req, res, next) => {
       pagination: { page, perPage }
     });
 
-    const numberOfProducts = await productServices.countProducts();
-
-    const totalPage = Math.ceil(numberOfProducts / perPage);
+    const numberOfDocument = await productServices.countProducts();
 
     const pagination = paginationServices.makePaginationData({
-      totalPage,
+      numberOfDocument,
       currentPage: page,
       perPage
     });
@@ -149,14 +147,14 @@ const getProductById = async (req, res, next) => {
 
 const searchProduct = async (req, res, next) => {
   try {
-    const { text } = req.body;
+    const { name } = req.query;
 
-    const { count, matchProduct } = await productServices.searchProduct(text);
+    const { count, matchProduct } = await productServices.searchProduct(name);
 
     let { page, perPage } = paginationServices.handlePaginationFromQuery(req);
-    const totalPage = count / perPage;
+
     const pagination = paginationServices.makePaginationData({
-      totalPage,
+      numberOfDocument: count,
       currentPage: page,
       perPage
     });

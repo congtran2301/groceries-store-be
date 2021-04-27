@@ -63,9 +63,9 @@ const deleteProduct = async (query) => {
   );
 };
 
-const searchProduct = async (text) => {
+const searchProduct = async (text, query = { isDelete: false }) => {
   const matchProduct = await Product.find(
-    { $text: { $search: text } },
+    { ...query, $text: { $search: text } },
     { score: { $meta: 'textScore' } }
   ).sort({ score: { $meta: 'textScore' } });
   const count = await Product.find(
