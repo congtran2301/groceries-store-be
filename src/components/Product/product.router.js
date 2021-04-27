@@ -31,9 +31,11 @@ router.use(
   authServices.hasStaffPermission,
   staffRouter
 );
+router.post('/favorite', productController.changeFavoriteStatus);
 router.get('/search', productController.searchProduct);
 router.get(
   '/:id',
+  authServices.optionalAuthentication,
   validate(commonValidation.paramsIdSchema),
   productController.getProductById
 );

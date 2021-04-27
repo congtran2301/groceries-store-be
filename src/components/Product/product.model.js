@@ -72,5 +72,26 @@ productSchema.virtual('measure', {
   foreignField: '_id',
   justOne: true
 });
+productSchema.methods.toJSONFor = function (userBehavior) {
+  return {
+    imageUrls: this.imageUrls,
+    name: this.name,
+    description: this.description,
+    isDiscount: this.isDiscount,
+    isDelete: this.isDelete,
+    status: this.status,
+    _id: this._id,
+    price: this.price,
+    category: this.category,
+    measure: this.measure,
+    height: this.height,
+    weight: this.weight,
+    length: this.length,
+    weight: this.weight,
+    favorited: userBehavior ? userBehavior.isFavorite(this._id) : false,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
+  };
+};
 const Product = mongoose.model('product', productSchema);
 export default Product;

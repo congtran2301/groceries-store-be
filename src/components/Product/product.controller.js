@@ -4,6 +4,7 @@ import productServices from '../Product/product.services';
 import categoryServices from '../Category/category.services';
 import paginationServices from '../../common/pagination';
 import measureServices from '../Measure/measure.services';
+import userBehaviorServices from '../UserBehavior/userBehavior.services';
 
 const createProduct = async (req, res, next) => {
   try {
@@ -129,16 +130,21 @@ const deleteProductById = async (req, res, next) => {
 const getProductById = async (req, res, next) => {
   try {
     const role = req.user ? req.user.role : null;
+    const userId = req.user ? req.user._id : null;
+
     const { id } = req.params;
 
     const status =
       ['staff', 'owner'].indexOf(role) !== -1 ? {} : { isDelete: false };
-
+    const userBehavior = await userBehaviorServices.getUserBehavior({ userId });
     const query = { _id: id };
-    const product = await productServices.getProduct({
-      ...query,
-      ...status
-    });
+    const product = await productServices.getProduct(
+      {
+        ...query,
+        ...status
+      },
+      userBehavior
+    );
     return success({ res, message: 'Success', data: product });
   } catch (err) {
     next(err);
@@ -169,11 +175,26 @@ const searchProduct = async (req, res, next) => {
     return next(err);
   }
 };
+const changeFavoriteStatus = async (req, res, next) => {
+  try {
+    const user = req.user;
+    console.log(user);
+    const { productId, favorite } = req.body;
+    await productServices.getProduct({ _id: productId });
+    if (favorite == true) {
+      await user.favorite(productId);
+    }
+    return success({ res, message: 'Success', statusCode: 200 });
+  } catch (err) {
+    return next(err);
+  }
+};
 export default {
   createProduct,
   getProducts,
   updateProductById,
   deleteProductById,
   getProductById,
-  searchProduct
+  searchProduct,
+  changeFavoriteStatus
 };

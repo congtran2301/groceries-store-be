@@ -37,6 +37,12 @@ const userSchema = new Schema(
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+userSchema.virtual('product', {
+  ref: 'product',
+  localField: 'favorites',
+  foreignField: '_id',
+  justOne: true
+});
 userSchema.pre('save', async function save(next) {
   if (!this.isModified('password')) return next();
   try {
@@ -47,6 +53,18 @@ userSchema.pre('save', async function save(next) {
     return next(err);
   }
 });
+userSchema.methods.isFavorite = function (id) {
+  console.log('User model check favorite');
+  return this.favorites.some(function (favoriteId) {
+    return favoriteId.toString() === id.toString();
+  });
+};
+userSchema.methods.favorite = async function (id) {
+  if (this.favorites.indexOf(id) === -1) {
+    this.favorites.push(id);
+  }
+  return await this.save();
+};
 userSchema.methods.validatePassword = async function (data) {
   return bcrypt.compare(data, this.password);
 };

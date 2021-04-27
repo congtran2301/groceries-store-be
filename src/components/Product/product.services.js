@@ -35,7 +35,7 @@ const getActiveProducts = async ({ query, pagination, populations = [] }) => {
     .limit(perPage);
 };
 
-const getProduct = async (query) => {
+const getProduct = async (query, userBehavior) => {
   const product = await Product.findOne(query, null, {
     populate: [
       {
@@ -49,7 +49,7 @@ const getProduct = async (query) => {
     ]
   });
   if (!product) throw new CustomError('Product not found', 400);
-  return product;
+  return product.toJSONFor(userBehavior);
 };
 const countProducts = async (query = {}) => {
   return await Product.countDocuments(query);
