@@ -9,6 +9,7 @@ const router = Router();
 router.use(authServices.isAuthentication);
 router
   .route('/favorite')
+  .get(userBehaviorController.getFavorites)
   .all(validate(userBehaviorValidation.changeFavoriteStatus))
   .post(userBehaviorController.addToFavorite)
   .delete(userBehaviorController.removeFavorite);

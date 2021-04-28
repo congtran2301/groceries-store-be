@@ -5,21 +5,21 @@ const addToFavorite = async (query, productId) => {
   if (!userBehavior) {
     userBehavior = new UserBehavior({
       userId: query.userId,
-      favoriteIds: []
+      favorites: []
     });
   }
-  const existFavorite = userBehavior.favoriteIds.find(
+  const existFavorite = userBehavior.favorites.find(
     (favorite) => favorite.productId == productId
   );
 
-  if (!existFavorite) userBehavior.favoriteIds.push({ productId });
+  if (!existFavorite) userBehavior.favorites.push({ productId });
 
   return await userBehavior.save();
 };
 
 const removeToFavorite = async (query, productId) => {
   return await UserBehavior.findOneAndUpdate(query, {
-    $pull: { favoriteIds: { productId } }
+    $pull: { favorites: { productId } }
   });
 };
 
@@ -27,7 +27,7 @@ const getAllFavorite = async (query) => {
   return await UserBehavior.find(query, null, {
     populate: [
       {
-        path: 'favoriteIds.product',
+        path: 'favorites.product',
         select: ['imageUrls', 'name', 'price', 'description']
       }
     ]

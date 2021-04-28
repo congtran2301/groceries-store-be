@@ -33,7 +33,23 @@ const removeFavorite = async (req, res, next) => {
   }
 };
 
+const getFavorites = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const favorites = await userBehaviorServices.getAllFavorite({ userId });
+    return success({
+      res,
+      message: 'Product successfully removed to your favorite',
+      data: favorites,
+      statusCode: 200
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   addToFavorite,
-  removeFavorite
+  removeFavorite,
+  getFavorites
 };

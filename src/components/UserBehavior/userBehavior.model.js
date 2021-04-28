@@ -18,7 +18,7 @@ const userBehaviorSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true
     },
-    favoriteIds: [productSchema]
+    favorites: [productSchema]
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
@@ -31,13 +31,13 @@ userBehaviorSchema.virtual('user', {
 });
 
 userBehaviorSchema.methods.isFavorite = function (id) {
-  return this.favoriteIds.some(function (favoriteId) {
+  return this.favorites.some(function (favoriteId) {
     return favoriteId.productId.toString() === id.toString();
   });
 };
 // userBehaviorSchema.methods.favorite = async function (id) {
-//   if (this.favoriteIds.indexOf(id) === -1) {
-//     this.favoriteIds.push(id);
+//   if (this.favorites.indexOf(id) === -1) {
+//     this.favorites.push(id);
 //   }
 //   return await this.save();
 // };
