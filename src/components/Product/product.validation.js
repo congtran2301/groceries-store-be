@@ -34,7 +34,9 @@ const updateProduct = {
 };
 const getProducts = {
   [RequestTypes.Query]: Joi.object({
-    categoryId: mongoId
+    categoryId: mongoId,
+    perPage: positiveNumber,
+    page: positiveNumber
   })
 };
 export default { createProduct, updateProduct, getProducts };

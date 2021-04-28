@@ -12,7 +12,7 @@ const makePaginationData = ({
 };
 const handlePaginationFromQuery = (req) => {
   let { page, perPage } = req.query;
-  page = isNaN(parseInt(page)) ? undefined : parseInt(page);
+  page = isNaN(parseInt(page)) ? 1 : parseInt(page);
   perPage = isNaN(parseInt(perPage)) ? 10 : parseInt(perPage);
   return {
     page,

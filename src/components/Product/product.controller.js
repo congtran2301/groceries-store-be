@@ -1,4 +1,4 @@
-import { pick } from 'lodash';
+import { pick, omit } from 'lodash';
 import { success, error } from '../../common/utils/response';
 import productServices from '../Product/product.services';
 import categoryServices from '../Category/category.services';
@@ -52,13 +52,13 @@ const getProducts = async (req, res, next) => {
         : productServices.getActiveProducts;
 
     let { page, perPage } = paginationServices.handlePaginationFromQuery(req);
-
+    const productQuery = omit(query, ['page', 'perPage']);
     const products = await getProductsService({
-      query,
+      query: productQuery,
       pagination: { page, perPage }
     });
 
-    const numberOfDocument = await productServices.countProducts();
+    const numberOfDocument = await productServices.countProducts(productQuery);
 
     const pagination = paginationServices.makePaginationData({
       numberOfDocument,
