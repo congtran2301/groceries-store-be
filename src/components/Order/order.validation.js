@@ -1,11 +1,11 @@
 import Joi from 'joi';
 import RequestTypes from '../../common/requestTypes';
 import { Statuses } from './order.config';
-import { mongoId, positiveNumber } from '../../common/joiSchema';
+import { mongoId, positiveNumber, phoneNumber } from '../../common/joiSchema';
 
 const createOrder = {
   [RequestTypes.Body]: Joi.object({
-    phone: Joi.string().required(),
+    phone: phoneNumber.required(),
     address: Joi.string().required(),
     productIds: Joi.array()
       .items(
