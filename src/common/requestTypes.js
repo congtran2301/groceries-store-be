@@ -1,6 +1,7 @@
 const RequestTypes = {
   Params: 'params',
-  Body: 'body'
+  Body: 'body',
+  Query: 'query'
 };
 
 export default RequestTypes;

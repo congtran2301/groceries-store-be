@@ -39,6 +39,10 @@ router.get(
   validate(commonValidation.paramsIdSchema),
   productController.getProductById
 );
-router.get('/', productController.getProducts);
+router.get(
+  '/',
+  validate(productValidationSchema.getProducts),
+  productController.getProducts
+);
 
 export default router;

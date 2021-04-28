@@ -45,6 +45,7 @@ const createProduct = async (req, res, next) => {
 const getProducts = async (req, res, next) => {
   try {
     const role = req.user ? req.user.role : null;
+    const query = req.query;
     const getProductsService =
       ['staff', 'owner'].indexOf(role) !== -1
         ? productServices.getProducts
@@ -53,7 +54,7 @@ const getProducts = async (req, res, next) => {
     let { page, perPage } = paginationServices.handlePaginationFromQuery(req);
 
     const products = await getProductsService({
-      query: {},
+      query,
       pagination: { page, perPage }
     });
 
@@ -90,12 +91,14 @@ const updateProductById = async (req, res, next) => {
     ]);
 
     //verify category and measure is exist
-    await categoryServices.getOneCategory({
-      _id: productBody.categoryId
-    });
-    await measureServices.getMeasure({
-      _id: productBody.measureId
-    });
+    await Promise.all([
+      categoryServices.getOneCategory({
+        _id: productBody.categoryId
+      }),
+      measureServices.getMeasure({
+        _id: productBody.measureId
+      })
+    ]);
 
     const product = await productServices.updateProduct(
       { _id: id },

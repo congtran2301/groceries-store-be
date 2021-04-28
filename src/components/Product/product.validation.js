@@ -32,4 +32,9 @@ const updateProduct = {
     imageUrls: Joi.array().items(Joi.string())
   })
 };
-export default { createProduct, updateProduct };
+const getProducts = {
+  [RequestTypes.Query]: Joi.object({
+    categoryId: mongoId
+  })
+};
+export default { createProduct, updateProduct, getProducts };

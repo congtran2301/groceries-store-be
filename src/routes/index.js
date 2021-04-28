@@ -12,6 +12,7 @@ import orderRouter from '../components/Order/order.router';
 import reportRouter from '../components/Report/report.router';
 import measureRouter from '../components/Measure/measure.router';
 import userBehaviorRouter from '../components/UserBehavior/userBehavior.router';
+import supplierRouter from '../components/Supplier/supplier.router';
 import swaggerRouter from '../swagger/swagger.router';
 
 router.use('/user', userRouter);
@@ -25,6 +26,7 @@ router.use('/order', orderRouter);
 router.use('/report', reportRouter);
 router.use('/measure', measureRouter);
 router.use('/behavior', userBehaviorRouter);
+router.use('/supplier', supplierRouter);
 router.use('/docs', swaggerRouter);
 
 export default router;
