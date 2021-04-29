@@ -21,13 +21,16 @@ const createProduct = async (req, res, next) => {
       'length',
       'status'
     ]);
+
+    await Promise.all([
+      categoryServices.getOneCategory({
+        _id: productBody.categoryId
+      }),
+      measureServices.getMeasure({
+        _id: productBody.measureId
+      })
+    ]);
     //verify category and measure is exist
-    await categoryServices.getOneCategory({
-      _id: productBody.categoryId
-    });
-    await measureServices.getMeasure({
-      _id: productBody.measureId
-    });
 
     const newProduct = await productServices.createProduct(productBody);
 

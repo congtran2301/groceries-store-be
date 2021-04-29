@@ -18,6 +18,7 @@ router
 router
   .route('/:id')
   .all(validate(commonValidation.paramsIdSchema))
-  .get(supplierController.getSupplier);
+  .get(supplierController.getSupplier)
+  .put(supplierController.updateSupplier);
 
 export default router;
