@@ -5,6 +5,7 @@ import categoryServices from '../Category/category.services';
 import paginationServices from '../../common/pagination';
 import measureServices from '../Measure/measure.services';
 import userBehaviorServices from '../UserBehavior/userBehavior.services';
+import warehouseItemServices from '../WareHouseItem/warehouseItem.services';
 
 const createProduct = async (req, res, next) => {
   try {
@@ -33,7 +34,7 @@ const createProduct = async (req, res, next) => {
     //verify category and measure is exist
 
     const newProduct = await productServices.createProduct(productBody);
-
+    await warehouseItemServices.create({ productId: newProduct._id });
     return success({
       res,
       message: 'Product has been created',

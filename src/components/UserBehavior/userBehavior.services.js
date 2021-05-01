@@ -24,11 +24,11 @@ const removeToFavorite = async (query, productId) => {
 };
 
 const getAllFavorite = async (query) => {
-  return await UserBehavior.find(query, null, {
+  return await UserBehavior.findOne(query, null, {
     populate: [
       {
         path: 'favorites.product',
-        select: ['imageUrls', 'name', 'price', 'description']
+        select: ['imageUrls', 'name', 'price', 'description', 'isDelete']
       }
     ]
   });

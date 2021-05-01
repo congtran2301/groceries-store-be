@@ -6,7 +6,7 @@ const addToFavorite = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const { productId } = req.body;
-    await productServices.getProduct({ _id: productId });
+    await productServices.getProduct({ _id: productId, isDelete: false });
     await userBehaviorServices.addToFavorite({ userId }, productId);
     return success({
       res,
@@ -36,10 +36,10 @@ const removeFavorite = async (req, res, next) => {
 const getFavorites = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const favorites = await userBehaviorServices.getAllFavorite({ userId });
+    const { favorites } = await userBehaviorServices.getAllFavorite({ userId });
     return success({
       res,
-      message: 'Product successfully removed to your favorite',
+      message: 'Success',
       data: favorites,
       statusCode: 200
     });
