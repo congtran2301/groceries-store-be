@@ -11,7 +11,8 @@ const addItemToCart = async (req, res) => {
 
     const cart = await cartServices.getCartByUserId(userId);
     const product = await productServices.getProduct({
-      _id: cartItem.productId
+      _id: cartItem.productId,
+      isDelete: false
     });
 
     const productExistInCart = await cartItemServices.getOneCartItem({

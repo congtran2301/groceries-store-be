@@ -15,7 +15,8 @@ const createOrder = async (req, res, next) => {
     const products = await Promise.all(
       productOrderDetail.map(async (prod) => {
         const product = await productServices.getProduct({
-          _id: prod.id
+          _id: prod.id,
+          isDelete: false
         });
         return {
           ...product.toObject(),
