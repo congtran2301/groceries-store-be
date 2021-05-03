@@ -7,9 +7,13 @@ const addToFavorite = async (req, res, next) => {
     const userId = req.user._id;
     const { productId } = req.body;
     await productServices.getProduct({ _id: productId, isDelete: false });
-    await userBehaviorServices.addToFavorite({ userId }, productId);
+    const favoritedItem = await userBehaviorServices.addToFavorite(
+      { userId },
+      productId
+    );
     return success({
       res,
+      data: favoritedItem,
       message: 'Product successfully added to your favorite',
       statusCode: 200
     });
