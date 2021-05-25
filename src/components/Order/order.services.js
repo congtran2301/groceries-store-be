@@ -57,8 +57,7 @@ const getOrders = async ({ query, pagination }) => {
   return await Order.find(query, null, {
     populate: [
       {
-        path: 'products.product',
-        select: 'name price'
+        path: 'products.product'
       }
     ]
   })
@@ -69,8 +68,7 @@ const getOrder = async (query) => {
   const order = await Order.findOne(query, null, {
     populate: [
       {
-        path: 'products.product',
-        select: 'name price'
+        path: 'products.product'
       }
     ]
   });

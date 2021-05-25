@@ -19,13 +19,12 @@ const createOrder = async (req, res, next) => {
           isDelete: false
         });
         return {
-          ...product.toObject(),
+          ...product,
           price: prod.quantity * product.price,
           quantity: prod.quantity
         };
       })
     );
-
     const order = await orderServices.createOrderAndPushProductsToOrder({
       userId,
       products,

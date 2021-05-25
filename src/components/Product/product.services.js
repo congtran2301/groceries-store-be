@@ -35,7 +35,7 @@ const getActiveProducts = async ({ query, pagination, populations = [] }) => {
     .limit(perPage);
 };
 
-const getProduct = async (query, userBehavior) => {
+const getProduct = async (query, userBehavior = null) => {
   const product = await Product.findOne(query, null, {
     populate: [
       {

@@ -8,11 +8,21 @@ const getWarehouseItems = async (req, res, next) => {
     const { page, perPage } = paginationServices.handlePaginationFromQuery(req);
     const query = omit(req.query, ['page', 'perPage']);
 
-    const numberOfDocument = await warehouseItemServices.count(query);
-    const warehouseItems = await warehouseItemServices.getAll({
-      query,
-      pagination: { page, perPage }
-    });
+    const [numberOfDocument, warehouseItems] = await Promise.all([
+      warehouseItemServices.count(query),
+      warehouseItemServices.getAll({
+        query,
+        pagination: { page, perPage },
+        options: {
+          populate: [
+            {
+              path: 'product',
+              select: 'name price'
+            }
+          ]
+        }
+      })
+    ]);
 
     const pagination = paginationServices.makePaginationData({
       numberOfDocument,
@@ -26,9 +36,8 @@ const getWarehouseItems = async (req, res, next) => {
 };
 const getWarehouseItem = async (req, res, next) => {
   try {
-    const { page, perPage } = paginationServices.handlePaginationFromQuery(
-      paginationServices
-    );
+    const { page, perPage } =
+      paginationServices.handlePaginationFromQuery(paginationServices);
     const query = omit(req.query, ['page', 'perPage']);
   } catch (err) {
     return next(er);

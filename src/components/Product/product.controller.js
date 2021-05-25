@@ -152,7 +152,19 @@ const getProductById = async (req, res, next) => {
       },
       userBehavior
     );
-    return success({ res, message: 'Success', data: product });
+    const warehouseItem = await warehouseItemServices.getOne(
+      { productId: id },
+      'quantity'
+    );
+    return success({
+      res,
+      message: 'Success',
+      data: {
+        ...product,
+        quantity: warehouseItem.quantity,
+        warehouseItemId: warehouseItem._id
+      }
+    });
   } catch (err) {
     next(err);
   }

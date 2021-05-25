@@ -1,16 +1,19 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-const warehouseItemSchema = new Schema({
-  productId: {
-    type: Schema.Types.ObjectId,
-    ref: 'product'
+const warehouseItemSchema = new Schema(
+  {
+    productId: {
+      type: Schema.Types.ObjectId,
+      ref: 'product'
+    },
+    quantity: {
+      type: Number,
+      default: 0
+    }
   },
-  quantity: {
-    type: Number,
-    default: 0
-  }
-});
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
 
 warehouseItemSchema.virtual('product', {
   ref: 'product',

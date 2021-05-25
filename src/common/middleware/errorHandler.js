@@ -10,6 +10,7 @@ const errorHandler = (err, req, res, next) => {
       statusCode: err.statusCode
     });
   }
+  console.log(err);
   return error({
     res,
     message: 'Internal Server Error',
