@@ -12,7 +12,12 @@ const warehouseTransactionSchema = new Schema(
     },
     type: {
       type: Number,
-      enum: [0, 1]
+      enum: [0, 1],
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true
     }
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }

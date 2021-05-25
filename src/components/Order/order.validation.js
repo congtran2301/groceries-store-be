@@ -16,6 +16,7 @@ const createOrder = {
           id: mongoId
         })
       )
+      .min(1)
       .required()
   })
 };
@@ -27,7 +28,8 @@ const updateOrder = {
 };
 const getOrders = {
   query: Joi.object({
-    status: Joi.string().valid(...Object.values(Statuses))
+    status: Joi.string().valid(...Object.values(Statuses)),
+    sort: Joi.string()
   })
 };
 export default {

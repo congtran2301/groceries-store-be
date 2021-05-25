@@ -58,15 +58,15 @@ const getOrders = async (req, res, next) => {
   try {
     const role = req.user.role;
     const userId = req.user._id;
-    const { status } = req.query;
+    const { status, sort } = req.query;
     const userOrder = ['staff', 'owner'].indexOf(role) !== -1 ? {} : { userId };
-
     let { page, perPage } = paginationServices.handlePaginationFromQuery(req);
 
     const query = { ...userOrder };
     if (status) query.status = status;
     const orders = await orderServices.getOrders({
       query,
+      sort,
       pagination: { page, perPage }
     });
 

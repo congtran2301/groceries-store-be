@@ -40,11 +40,11 @@ const removeFavorite = async (req, res, next) => {
 const getFavorites = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const { favorites } = await userBehaviorServices.getAllFavorite({ userId });
+    const favorites = await userBehaviorServices.getAllFavorite({ userId });
     return success({
       res,
       message: 'Success',
-      data: favorites,
+      data: favorites ? favorites.favorites : [],
       statusCode: 200
     });
   } catch (err) {

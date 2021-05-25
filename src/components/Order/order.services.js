@@ -51,7 +51,7 @@ const updateOrder = async (query, data) => {
   return await Order.findOneAndUpdate(query, data, { new: true });
 };
 
-const getOrders = async ({ query, pagination }) => {
+const getOrders = async ({ query, pagination, sort }) => {
   const { page, perPage } = pagination;
   const skip = (page - 1) * perPage;
   return await Order.find(query, null, {
@@ -61,6 +61,7 @@ const getOrders = async ({ query, pagination }) => {
       }
     ]
   })
+    .sort(sort)
     .skip(skip)
     .limit(perPage);
 };

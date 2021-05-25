@@ -14,6 +14,7 @@ import measureRouter from '../components/Measure/measure.router';
 import userBehaviorRouter from '../components/UserBehavior/userBehavior.router';
 import supplierRouter from '../components/Supplier/supplier.router';
 import warehouseItemRouter from '../components/WareHouseItem/warehouseItem.router';
+import warehouseTransactionRouter from '../components/WareHouseTransaction/warehouseTransaction.router';
 import swaggerRouter from '../swagger/swagger.router';
 
 router.use('/user', userRouter);
@@ -29,7 +30,7 @@ router.use('/measure', measureRouter);
 router.use('/behavior', userBehaviorRouter);
 router.use('/supplier', supplierRouter);
 router.use('/warehouseitem', warehouseItemRouter);
-
+router.use('/warehouse-transaction', warehouseTransactionRouter);
 router.use('/docs', swaggerRouter);
 
 export default router;
