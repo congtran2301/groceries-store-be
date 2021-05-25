@@ -58,13 +58,15 @@ const getOrders = async (req, res, next) => {
   try {
     const role = req.user.role;
     const userId = req.user._id;
-
+    const { status } = req.query;
     const userOrder = ['staff', 'owner'].indexOf(role) !== -1 ? {} : { userId };
 
     let { page, perPage } = paginationServices.handlePaginationFromQuery(req);
 
+    const query = { ...userOrder };
+    if (status) query.status = status;
     const orders = await orderServices.getOrders({
-      query: { ...userOrder },
+      query,
       pagination: { page, perPage }
     });
 
@@ -89,8 +91,11 @@ const getOrder = async (req, res) => {
 
     const { id } = req.params;
     const userOrder = ['staff', 'owner'].indexOf(role) !== -1 ? {} : { userId };
-    console.log({ ...userOrder, id });
-    const order = await orderServices.getOrder({ ...userOrder, _id: id });
+
+    const order = await orderServices.getOrder({
+      ...userOrder,
+      _id: id
+    });
     return success({ res, message: 'success', data: order });
   } catch (err) {
     return error({ res, message: err.message, statusCode: 400 });

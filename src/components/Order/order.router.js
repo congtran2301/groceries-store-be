@@ -28,7 +28,7 @@ router.use(
 router.use(authServices.isAuthentication);
 router
   .route('/')
-  .get(orderController.getOrders)
+  .get(validate(orderValidationSchema.getOrders), orderController.getOrders)
   .post(
     validate(orderValidationSchema.createOrder),
     orderController.createOrder

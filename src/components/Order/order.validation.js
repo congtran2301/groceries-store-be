@@ -25,8 +25,13 @@ const updateOrder = {
     isPaid: Joi.boolean()
   })
 };
-
+const getOrders = {
+  query: Joi.object({
+    status: Joi.string().valid(...Object.values(Statuses))
+  })
+};
 export default {
   createOrder,
-  updateOrder
+  updateOrder,
+  getOrders
 };

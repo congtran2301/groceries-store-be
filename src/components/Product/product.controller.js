@@ -161,8 +161,8 @@ const getProductById = async (req, res, next) => {
       message: 'Success',
       data: {
         ...product,
-        quantity: warehouseItem.quantity,
-        warehouseItemId: warehouseItem._id
+        quantity: warehouseItem ? warehouseItem.quantity : 0,
+        warehouseItemId: warehouseItem ? warehouseItem._id : null
       }
     });
   } catch (err) {

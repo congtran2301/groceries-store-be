@@ -4,5 +4,6 @@ export const Statuses = {
   Exported: 'exported',
   Delivering: 'delivering',
   Delivered: 'delivered',
+  Cancelled: 'cancelled',
   Completed: 'completed'
 };

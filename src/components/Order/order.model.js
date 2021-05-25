@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Statuses } from './order.config';
 const Schema = mongoose.Schema;
 const productSchema = new Schema(
   {
@@ -44,14 +45,7 @@ const orderSchema = new Schema(
     },
     status: {
       type: String,
-      enum: [
-        'pending',
-        'processing',
-        'exported',
-        'delivering',
-        'delivered',
-        'completed'
-      ],
+      enum: Object.values(Statuses),
       default: 'pending'
     },
     date: {
