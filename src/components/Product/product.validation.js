@@ -4,7 +4,7 @@ import RequestTypes from '../../common/requestTypes';
 
 const createProduct = {
   [RequestTypes.Body]: Joi.object({
-    name: Joi.string().min(3).max(50).required(),
+    name: Joi.string().min(3).max(200).required(),
     description: Joi.string(),
     price: positiveNumber.message('Price must be greater than or equal to 0'),
     height: positiveNumber.message('Height must be greater than or equal to 0'),
